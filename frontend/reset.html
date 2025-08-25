@@ -1,0 +1,47 @@
+<!doctype html><html><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="stylesheet" href="auth.css">
+<title>Reset password • Smart Librarian</title>
+</head><body>
+<div class="container">
+  <div class="card">
+    <h1>Reset password</h1>
+    <div id="msg" class="alert" style="display:none"></div>
+
+    <label>Email</label>
+    <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+    <div class="row"><button id="btnSend">Send code</button></div>
+
+    <div class="sp"></div><hr class="sp" style="opacity:.1">
+
+    <label>6-digit code</label>
+    <input id="code" placeholder="123456" inputmode="numeric" maxlength="6">
+    <label>New password</label>
+    <input id="newpw" type="password" placeholder="At least 8 characters">
+    <div class="row"><button id="btnReset">Set new password</button></div>
+
+    <p class="note center"><a class="link" href="login.html">Back to login</a></p>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+const msg = document.getElementById('msg');
+btnSend.onclick = async ()=>{
+  hide(msg);
+  try{ await post('/auth/forgot', {email: emailEl.value.trim()}); show(msg,'If the address exists, a code was sent.', true) }
+  catch(e){ show(msg,e,false) }
+};
+btnReset.onclick = async ()=>{
+  hide(msg);
+  const email=emailEl.value.trim(), code=codeEl.value.trim(), new_password=newpwEl.value;
+  try{ await post('/auth/reset',{email,code,new_password}); show(msg,'Password updated. You can log in now.', true) }
+  catch(e){ show(msg,e,false) }
+};
+const emailEl = document.getElementById('email');
+const codeEl  = document.getElementById('code');
+const newpwEl = document.getElementById('newpw');
+const btnSend = document.getElementById('btnSend');
+const btnReset= document.getElementById('btnReset');
+</script>
+</body></html>

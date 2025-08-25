@@ -1,0 +1,39 @@
+<!doctype html><html><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="stylesheet" href="auth.css">
+<title>Login • Smart Librarian</title>
+</head><body>
+<div class="container">
+  <div class="card">
+    <h1>Welcome back</h1>
+    <div id="msg" class="alert" style="display:none"></div>
+    <label>Email</label>
+    <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+    <label>Password</label>
+    <input id="pass" type="password" placeholder="********" autocomplete="current-password">
+    <div class="sp"></div>
+    <div class="row">
+      <button id="btnLogin">Login</button>
+      <a class="link" href="register.html">Create account</a>
+    </div>
+    <p class="note center"><a class="link" href="reset.html">Forgot password?</a></p>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+const msg = document.getElementById('msg');
+document.getElementById('btnLogin').onclick = async ()=>{
+  hide(msg);
+  const email = emailEl.value.trim(), password = passEl.value;
+  try{
+    const data = await post('/auth/login', {email,password});
+    saveToken(data);
+    show(msg,'Logged in!', true);
+    setTimeout(()=>goto('index.html'), 600); // send to your main UI
+  }catch(e){ show(msg, e, false) }
+};
+const emailEl = document.getElementById('email');
+const passEl  = document.getElementById('pass');
+</script>
+</body></html>

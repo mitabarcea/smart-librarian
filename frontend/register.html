@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Register • Smart Librarian</title>
+    <link rel="stylesheet" href="auth.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Create account</h1>
+            <div id="msg" class="alert" style="display:none"></div>
+
+            <label>Email</label>
+            <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+
+            <label>Password</label>
+            <input id="pass" type="password" placeholder="At least 8 characters" autocomplete="new-password">
+
+            <div class="sp"></div>
+            <div class="row">
+                <button id="btnReg">Register</button>
+                <a class="link" href="login.html">I have an account</a>
+            </div>
+            <p class="note">After registering, you’ll be asked to enter a 6-digit code we send to your email.</p>
+        </div>
+    </div>
+
+    <!-- Modal (native <dialog>) -->
+    <dialog id="verifyDlg">
+        <div class="card" style="width:min(92vw,420px); padding:20px">
+            <h3 style="margin:0 0 8px">Verify your email</h3>
+            <p class="note" id="dlgInfo">We sent a 6-digit code to <b id="dlgEmail"></b>.</p>
+            <div id="dlgMsg" class="alert" style="display:none"></div>
+            <label>6-digit code</label>
+            <input id="code" inputmode="numeric" maxlength="6" placeholder="123456">
+            <div class="sp"></div>
+            <div class="row">
+                <button id="btnVerify" type="button">Verify</button>
+                <button id="btnResend" type="button" class="ghost">Resend code</button>
+                <button id="btnEdit" type="button" class="ghost">Change email</button>
+            </div>
+        </div>
+    </dialog>
+
+
+    <script src="auth.js" defer></script>
+    <script>
+        function log(e) { console.log(e) }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const msg = document.getElementById('msg');
+            const emailEl = document.getElementById('email');
+            const passEl = document.getElementById('pass');
+
+            const dlg = document.getElementById('verifyDlg');
+            const dlgMsg = document.getElementById('dlgMsg');
+            const dlgEmail = document.getElementById('dlgEmail');
+            const codeEl = document.getElementById('code');
+
+            function show(el, text, ok = true) { el.textContent = text; el.className = 'alert ' + (ok ? 'ok' : 'err'); el.style.display = 'block'; }
+            function hide(el) { el.style.display = 'none' }
+
+            async function openVerifyModal(email, autoResend = false) {
+                dlgEmail.textContent = email;
+                codeEl.value = '';
+                hide(dlgMsg);
+                if (autoResend) {
+                    try { await post('/auth/resend-verify', { email }); show(dlgMsg, 'Code re-sent (if unverified).', true); }
+                    catch (e) { show(dlgMsg, e, false); }
+                }
+                dlg.showModal();
+            }
+
+            // Register click
+            document.getElementById('btnReg').addEventListener('click', async () => {
+                console.log('Register button clicked');
+                hide(msg);
+                const email = emailEl.value.trim();
+                const password = passEl.value;
+
+                if (!email) { show(msg, 'Please enter an email.', false); return; }
+                if (password.length < 8) { show(msg, 'Password must be at least 8 characters.', false); return; }
+
+                try {
+                    const data = await post('/auth/register', { email, password });
+                    console.log('register response:', data);
+                    if (data.status === 'pending_verification') {
+                        await openVerifyModal(email, false);
+                    } else {
+                        show(msg, data.message || 'Registered.', true);
+                    }
+                } catch (e) {
+                    console.log('register error:', e);
+                    const text = String(e || '');
+                    if (text.toLowerCase().includes('already registered')) {
+                        await openVerifyModal(email, true);
+                    } else {
+                        show(msg, text, false);
+                    }
+                }
+            });
+
+            // Verify
+            document.getElementById('btnVerify').addEventListener('click', async () => {
+                hide(dlgMsg);
+                const email = emailEl.value.trim();
+                const code = codeEl.value.trim();
+                if (!code) { show(dlgMsg, 'Enter the 6-digit code.', false); return; }
+                try {
+                    await post('/auth/verify', { email, code });
+                    show(dlgMsg, 'Email verified! Redirecting…', true);
+                    setTimeout(() => goto('login.html'), 700);
+                } catch (e) {
+                    show(dlgMsg, e, false);
+                }
+            });
+
+            // Resend
+            document.getElementById('btnResend').addEventListener('click', async () => {
+                hide(dlgMsg);
+                try { await post('/auth/resend-verify', { email: document.getElementById('email').value.trim() }); show(dlgMsg, 'Code sent if unverified.', true); }
+                catch (e) { show(dlgMsg, e, false); }
+            });
+
+            // Edit email
+            document.getElementById('btnEdit').addEventListener('click', () => dlg.close());
+        });
+    </script>
+
+</body>
+
+</html>

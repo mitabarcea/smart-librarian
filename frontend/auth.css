@@ -1,0 +1,208 @@
+:root {
+    --bg: #0b1220;
+    --panel: #141c2f;
+    --text: #e6e9ef;
+    --muted: #9aa4b2;
+    --accent: #6c7cff;
+    --ok: #38bdf8;
+    --err: #f43f5e;
+}
+
+* {
+    box-sizing: border-box
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(180deg, #0a1120, #0b1220);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial
+}
+
+.container {
+    max-width: 520px;
+    margin: 6vh auto;
+    padding: 24px
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .25)
+}
+
+h1 {
+    margin: 0 0 16px;
+    font-size: 28px
+}
+
+.muted {
+    color: var(--muted)
+}
+
+label {
+    display: block;
+    margin: 14px 0 6px
+}
+
+input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid #223146;
+    background: #0f172a;
+    color: var(--text)
+}
+
+input:focus {
+    outline: 2px solid var(--accent);
+    border-color: transparent
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+    align-items: center
+}
+
+button {
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    cursor: pointer
+}
+
+button.ghost {
+    background: #1f2937
+}
+
+button.warn {
+    background: var(--err)
+}
+
+.link {
+    color: var(--ok);
+    text-decoration: none
+}
+
+.note {
+    font-size: 13px;
+    color: var(--muted)
+}
+
+.sp {
+    height: 10px
+}
+
+.center {
+    text-align: center
+}
+
+.alert {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    background: #15223c;
+    border: 1px solid #223146
+}
+
+.alert.ok {
+    border-color: #0ea5e9;
+    background: #0b2436
+}
+
+.alert.err {
+    border-color: #be123c;
+    background: #2a0f16
+}
+
+/* Dialog base */
+dialog {
+    border: none;
+    border-radius: 16px;
+    padding: 0;
+    background: #0b1220;
+    /* deep slate */
+    color: #e2e8f0;
+    /* light text */
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, .45);
+    backdrop-filter: blur(2px);
+}
+
+/* Inputs in dialog */
+dialog input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    background: #0f172a;
+    color: #e2e8f0;
+    outline: none;
+}
+
+dialog input::placeholder {
+    color: #94a3b8;
+    opacity: .9;
+}
+
+/* Buttons inside dialog */
+dialog button {
+    background: #6366f1;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+dialog button.ghost {
+    background: transparent;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+}
+
+dialog::label {
+    display: block;
+    margin: 10px 0 6px;
+    color: #cbd5e1;
+    /* light gray */
+}
+
+dialog::h3 {
+    color: #e2e8f0;
+    margin: 0 0 10px;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, .45);
+}
+
+dialog .card {
+    background: #0b1220;
+    color: #e5e7eb;
+}
+
+dialog input {
+    color: #e5e7eb;
+}
+
+dialog input::placeholder {
+    color: #9ca3af;
+}
+
+
+dialog .card {
+    max-width: 600px;
+    width: 90%;
+    margin: auto;
+    padding: 24px;
+}

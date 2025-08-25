@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+backend/app/data/chroma/
+backend/app/data/*.sqlite*
+backend/app/data/*.db
+backend/app/data/*.log
+backend/.env
+.env
+*.env
+node_modules/
+dist/
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

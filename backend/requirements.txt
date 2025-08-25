@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+openai>=1.43.0
+chromadb
+tiktoken
+pydantic
+better-profanity
+pyyaml
+pyttsx3        
+gTTS           
+whisper      
