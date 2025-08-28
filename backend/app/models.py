@@ -37,6 +37,33 @@ class VerificationCode(SQLModel, table=True):
     attempts: int = 0
     consumed: bool = False
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    
+class ShelfStatus(str, PyEnum):
+    WANT = "WANT"
+    READING = "READING"
+    READ = "READ"
+
+class BookShelf(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: int = Field(index=True, foreign_key="user.id")
+    title: str
+    author: Optional[str] = ""
+    status: ShelfStatus = Field(default=ShelfStatus.WANT)
+    added_at: datetime = Field(default_factory=datetime.utcnow)
+
+class SearchEvent(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: int = Field(index=True, foreign_key="user.id")
+    query: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class UserBadge(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: int = Field(index=True, foreign_key="user.id")
+    code: str = Field(index=True)
+    name: str
+    description: str
+    awarded_at: datetime = Field(default_factory=datetime.utcnow)
 
 def init_db():
     SQLModel.metadata.create_all(engine)

@@ -12,6 +12,7 @@ from .tools import get_summary_by_title
 from .profanity import is_clean
 from .tts import text_to_speech_mp3
 from .auth import router as auth_router
+from .profile import router as me_router
 
 app = FastAPI(title="Smart Librarian")
 
@@ -29,6 +30,8 @@ app.add_middleware(
     allow_credentials=True,
 )
 
+# ---- Routers ----
+app.include_router(me_router)
 app.include_router(auth_router)
 
 # ---- Serve static frontend at /ui ----
