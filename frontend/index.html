@@ -1,54 +1,46 @@
 <!doctype html>
 <html lang="en" class="h-full">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Smart Librarian</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
+    // Redirect to login if not authenticated
     const tok = localStorage.getItem('access');
     if (!tok) { window.location.href = 'login.html'; }
-  </script>
-  <button onclick="localStorage.removeItem('access'); location.href='login.html'">Logout</button>
-  <script>
+
     // Enable class-based dark mode so toggling the `dark` class works
     tailwind.config = { darkMode: 'class' };
   </script>
   <style>
     /* subtle scrollbar */
-    .nice-scroll::-webkit-scrollbar {
-      height: 10px;
-      width: 10px
-    }
-
-    .nice-scroll::-webkit-scrollbar-thumb {
-      background: #d4d4d8;
-      border-radius: 8px
-    }
-
-    .dark .nice-scroll::-webkit-scrollbar-thumb {
-      background: #3f3f46
-    }
+    .nice-scroll::-webkit-scrollbar{height:10px;width:10px}
+    .nice-scroll::-webkit-scrollbar-thumb{background:#d4d4d8;border-radius:8px}
+    .dark .nice-scroll::-webkit-scrollbar-thumb{background:#3f3f46}
   </style>
 </head>
 
-<body
-  class="h-full bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 text-slate-900 dark:text-slate-100">
+<body class="h-full bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 text-slate-900 dark:text-slate-100">
   <div class="min-h-full max-w-4xl mx-auto px-4 py-6">
     <!-- Header -->
     <header class="flex items-center justify-between mb-4">
-      <div>
+      <!-- Left: title + profile button -->
+      <div class="flex items-center gap-3">
         <h1 class="text-3xl font-bold tracking-tight">Smart Librarian</h1>
-        <p class="text-sm text-slate-500 dark:text-slate-400">Ask for book recommendations by theme or mood.</p>
+        <button id="btnProfile"
+          class="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          Profile
+        </button>
       </div>
-      <button id="openSidebar"
-        class="rounded-xl px-3 py-2 text-sm bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
-        ☰ Profile
-      </button>
+
+      <!-- Right: theme toggle -->
       <button id="themeBtn"
         class="rounded-xl px-3 py-2 text-sm bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 transition">
-        <span id="themeLabel">Dark</span> mode
+        <span id="themeLabel">Light</span> mode
       </button>
     </header>
 
@@ -58,8 +50,7 @@
       <div id="chat" class="nice-scroll h-[55vh] overflow-y-auto space-y-3 pr-1">
         <!-- initial tip -->
         <div class="flex items-start gap-3">
-          <div class="shrink-0 rounded-full bg-indigo-600 text-white w-8 h-8 grid place-items-center font-semibold">A
-          </div>
+          <div class="shrink-0 rounded-full bg-indigo-600 text-white w-8 h-8 grid place-items-center font-semibold">A</div>
           <div class="bg-slate-100 dark:bg-slate-800 rounded-2xl px-4 py-3 max-w-[75%]">
             Hi! Tell me what you’re into, and I’ll pick one great book and explain why.
           </div>
@@ -69,8 +60,7 @@
       <!-- Samples -->
       <div class="mt-4 flex flex-wrap gap-2">
         <button class="chip" data-q="Recommend me a book about freedom and social control.">Freedom & control</button>
-        <button class="chip" data-q="I love whimsical adventures and found family. What should I read?">Whimsical
-          adventure</button>
+        <button class="chip" data-q="I love whimsical adventures and found family. What should I read?">Whimsical adventure</button>
         <button class="chip" data-q="Suggest a classic romance with sharp social commentary.">Classic romance</button>
         <button class="chip" data-q="I want a gritty post-apocalyptic story with heart.">Post-apocalyptic</button>
       </div>
@@ -81,14 +71,10 @@
           class="flex-1 resize-none rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
 
         <div class="flex flex-col gap-2 min-w-[112px]">
-          <button id="send"
-            class="rounded-xl px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50">Send</button>
+          <button id="send" class="rounded-xl px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50">Send</button>
           <div class="flex gap-2">
-            <button id="mic"
-              class="flex-1 rounded-xl px-3 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">Speak</button>
-            <button id="speak"
-              class="flex-1 rounded-xl px-3 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700"
-              disabled>Read</button>
+            <button id="mic" class="flex-1 rounded-xl px-3 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">Speak</button>
+            <button id="speak" class="flex-1 rounded-xl px-3 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700" disabled>Read</button>
           </div>
         </div>
       </div>
@@ -96,8 +82,8 @@
       <!-- Loading -->
       <div id="loading" class="hidden mt-3 flex items-center gap-2 text-slate-500">
         <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4A4 4 0 008 12H4z" />
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4A4 4 0 008 12H4z"></path>
         </svg>
         Thinking…
       </div>
@@ -113,8 +99,9 @@
   <div id="backdrop" class="fixed inset-0 bg-black/40 hidden"></div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 w-80 bg-white dark:bg-slate-900 shadow-2xl border-r border-slate-200 dark:border-slate-800
-         transform -translate-x-full transition-transform duration-300 z-50">
+  <aside id="sidebar"
+    class="fixed inset-y-0 left-0 w-80 bg-white dark:bg-slate-900 shadow-2xl border-r border-slate-200 dark:border-slate-800
+           transform -translate-x-full transition-transform duration-300 z-50">
     <div class="p-4 flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
       <div>
         <div id="meName" class="font-semibold">Profile</div>
@@ -144,11 +131,9 @@
         <ul id="meRead" class="space-y-1 text-sm"></ul>
       </section>
 
-      <button id="logoutBtn"
-        class="w-full rounded-xl px-3 py-2 text-sm bg-rose-600 text-white hover:bg-rose-700">Logout</button>
+      <button id="logoutBtn" class="w-full rounded-xl px-3 py-2 text-sm bg-rose-600 text-white hover:bg-rose-700">Logout</button>
     </div>
   </aside>
-
 
   <script>
     // ---------- Config ----------
@@ -165,6 +150,11 @@
     const themeBtn = document.getElementById('themeBtn');
     const themeLabel = document.getElementById('themeLabel');
 
+    const btnProfile = document.getElementById('btnProfile');
+    const sidebar = document.getElementById('sidebar');
+    const closeSidebarBtn = document.getElementById('closeSidebar');
+    const backdrop = document.getElementById('backdrop');
+
     // ---------- Theme ----------
     const applyTheme = (t) => {
       document.documentElement.classList.toggle('dark', t === 'dark');
@@ -176,12 +166,8 @@
     themeBtn.onclick = () => applyTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark');
 
     // ---------- Helpers ----------
-    function showToast(msg) {
-      toast.querySelector('div').textContent = msg;
-      toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 2200);
-    }
-    function bubble(role, html) {
+    function showToast(msg){ toast.querySelector('div').textContent = msg; toast.classList.remove('hidden'); setTimeout(()=>toast.classList.add('hidden'), 2200); }
+    function bubble(role, html){
       const me = role === 'user';
       const avatar = me
         ? '<div class="shrink-0 rounded-full bg-sky-600 text-white w-8 h-8 grid place-items-center font-semibold">U</div>'
@@ -194,60 +180,75 @@
       chat.appendChild(wrap);
       chat.scrollTop = chat.scrollHeight;
     }
-    function setLoading(on) {
-      loading.classList.toggle('hidden', !on);
-      sendBtn.disabled = on;
-      micBtn.disabled = on;
-    }
-    function stripHTML(s) { const d = document.createElement('div'); d.innerHTML = s; return d.textContent || d.innerText || ''; }
+    function setLoading(on){ loading.classList.toggle('hidden', !on); sendBtn.disabled = on; micBtn.disabled = on; }
+    function stripHTML(s){ const d=document.createElement('div'); d.innerHTML=s; return d.textContent || d.innerText || ''; }
 
     let lastReply = "";
 
     // ---------- API calls ----------
-    async function askServer(text) {
+    async function askServer(text){
       const r = await fetch(API + '/ask', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: text })
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({query:text})
       });
-      if (!r.ok) {
-        const t = await r.text();
-        throw new Error(t || r.statusText);
-      }
+      if(!r.ok){ const t = await r.text(); throw new Error(t || r.statusText); }
       return await r.json();
     }
-    async function tts(text, lang = 'en') {
+    async function tts(text, lang='en'){
       const r = await fetch(API + '/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, lang })
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({text, lang})
       });
-      if (!r.ok) throw new Error(await r.text());
+      if(!r.ok) throw new Error(await r.text());
       const blob = await r.blob();
       new Audio(URL.createObjectURL(blob)).play();
     }
 
+    // --- auth fetch wrapper ---
+    const access = () => localStorage.getItem('access');
+    async function authGet(url){
+      const r = await fetch(API+url, { headers:{ 'Authorization':'Bearer '+access() }});
+      if(!r.ok) throw new Error(await r.text());
+      return r.json();
+    }
+    async function authPost(url, body){
+      const r = await fetch(API+url, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+access() },
+        body: JSON.stringify(body || {})
+      });
+      if(!r.ok) throw new Error(await r.text());
+      return r.json();
+    }
+    async function authPatch(url, body){
+      const r = await fetch(API+url, {
+        method:'PATCH',
+        headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+access() },
+        body: JSON.stringify(body || {})
+      });
+      if(!r.ok) throw new Error(await r.text());
+      return r.json();
+    }
+
     // ---------- UI actions ----------
-    async function send() {
+    async function send(){
       const text = q.value.trim();
-      if (!text) return;
+      if(!text) return;
       q.value = '';
       bubble('user', text);
-      authPost('/me/track/search', { query: text }).catch(() => { });
-      try {
+
+      // track search (non-blocking)
+      authPost('/me/track/search', { query: text }).catch(()=>{});
+
+      try{
         setLoading(true);
         const data = await askServer(text);
         let reply = data.message || '';
-        if (data.recommended_title) {
-
+        if (data.recommended_title){
           const safeTitle = (data.recommended_title || '').replace(/"/g, '&quot;');
           const safeAuthor = (data.author || '').replace(/"/g, '&quot;');
-          reply += `<div class="mt-3">
-            <button class="rounded-lg px-3 py-1.5 text-sm bg-emerald-600 text-white hover:bg-emerald-700"
-              onclick="authPost('/me/shelf',{title:'${safeTitle}',author:'${safeAuthor}',status:'WANT'}).then(()=>{showToast('Saved to “Want to read”.');}).catch(()=>showToast('Login to save.'));">
-              Save to “Want to read”
-            </button>
-          </div>`;
 
           const badge = data.difficulty
             ? `<span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-200">${data.difficulty}</span>`
@@ -255,29 +256,35 @@
           const by = data.author ? ` <span class="opacity-70">by ${data.author}</span>` : '';
           reply = `I recommend <b>${data.recommended_title}</b>${by} ${badge}<br><br>${data.detailed_summary}`;
 
-          if (Array.isArray(data.alternatives) && data.alternatives.length) {
+          if (Array.isArray(data.alternatives) && data.alternatives.length){
             const alt = data.alternatives
-              .map(a => `${a.title}${a.author ? ` — ${a.author}` : ''}${a.difficulty ? ` [${a.difficulty}]` : ''}`)
+              .map(a => `${a.title}${a.author?` — ${a.author}`:''}${a.difficulty?` [${a.difficulty}]`:''}`)
               .join(', ');
             reply += `<br><small>Alternatives: ${alt}</small>`;
           }
+
+          reply += `<div class="mt-3">
+            <button class="rounded-lg px-3 py-1.5 text-sm bg-emerald-600 text-white hover:bg-emerald-700"
+              onclick="authPost('/me/shelf',{title:'${safeTitle}',author:'${safeAuthor}',status:'WANT'}).then(()=>{showToast('Saved to “Want to read”.');}).catch(()=>showToast('Login to save.'));"
+            >Save to “Want to read”</button>
+          </div>`;
         }
 
         lastReply = stripHTML(reply);
         bubble('assistant', reply);
         speakBtn.disabled = false;
-      } catch (e) {
+      }catch(e){
         showToast('Request failed');
         bubble('assistant', 'Sorry, something went wrong.');
         console.error(e);
-      } finally {
+      }finally{
         setLoading(false);
       }
     }
 
     sendBtn.onclick = send;
-    q.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
+    q.addEventListener('keydown', (e)=>{
+      if(e.key==='Enter' && !e.shiftKey){
         e.preventDefault();
         send();
       }
@@ -292,7 +299,7 @@
     // STT (en-US)
     micBtn.onclick = () => {
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SR) { showToast("SpeechRecognition unsupported"); return; }
+      if(!SR){ showToast("SpeechRecognition unsupported"); return; }
       const rec = new SR();
       rec.lang = 'en-US';
       rec.interimResults = false; rec.maxAlternatives = 1;
@@ -302,79 +309,54 @@
 
     // TTS (English)
     speakBtn.onclick = () => {
-      if (!lastReply) return;
-      tts(lastReply, 'en').catch(() => showToast('TTS failed'));
+      if(!lastReply) return;
+      tts(lastReply, 'en').catch(()=>showToast('TTS failed'));
     };
 
-    // --- auth fetch wrapper ---
-    const access = () => localStorage.getItem('access');
-    async function authGet(url) {
-      const r = await fetch(API + url, { headers: { 'Authorization': 'Bearer ' + access() } });
-      if (!r.ok) throw new Error(await r.text());
-      return r.json();
+    // ---------- Sidebar open/close ----------
+    function openSidebar(){
+      sidebar.classList.remove('-translate-x-full');
+      backdrop.classList.remove('hidden');
+      loadProfile().catch(()=>{});
     }
-    async function authPost(url, body) {
-      const r = await fetch(API + url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + access() },
-        body: JSON.stringify(body || {})
-      });
-      if (!r.ok) throw new Error(await r.text());
-      return r.json();
-    }
-    async function authPatch(url, body) {
-      const r = await fetch(API + url, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + access() },
-        body: JSON.stringify(body || {})
-      });
-      if (!r.ok) throw new Error(await r.text());
-      return r.json();
+    function closeSidebar(){
+      sidebar.classList.add('-translate-x-full');
+      backdrop.classList.add('hidden');
     }
 
-    // --- sidebar open/close ---
-    const sidebar = document.getElementById('sidebar');
-    const backdrop = document.getElementById('backdrop');
-    document.getElementById('openSidebar').onclick = () => { sidebar.classList.remove('-translate-x-full'); backdrop.classList.remove('hidden'); loadProfile(); };
-    document.getElementById('closeSidebar').onclick = () => { sidebar.classList.add('-translate-x-full'); backdrop.classList.add('hidden'); };
-    backdrop.onclick = () => document.getElementById('closeSidebar').click();
+    btnProfile.addEventListener('click', openSidebar);
+    closeSidebarBtn.addEventListener('click', closeSidebar);
+    backdrop.addEventListener('click', closeSidebar);
 
-    // --- renderers ---
-    function badgePill(b) {
+    // ---------- Profile renderers ----------
+    function badgePill(b){
       return `<span class="px-2 py-1 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200">${b.name}</span>`;
     }
-    function li(text) {
-      return `<li class="flex justify-between gap-2">
-      <span>${text}</span>
-    </li>`;
+    function li(text){
+      return `<li class="flex justify-between gap-2"><span>${text}</span></li>`;
     }
 
-    async function loadProfile() {
-      try {
-        const me = await authGet('/me');
-        document.getElementById('meName').textContent = me.display_name || 'Profile';
-        document.getElementById('meEmail').textContent = me.email;
-        document.getElementById('meStats').textContent = `Searches: ${me.stats.searches} • Want: ${me.stats.want} • Read: ${me.stats.read}`;
+    async function loadProfile(){
+      const me = await authGet('/me');
+      document.getElementById('meName').textContent = me.display_name || 'Profile';
+      document.getElementById('meEmail').textContent = me.email;
+      document.getElementById('meStats').textContent = `Searches: ${me.stats.searches} • Want: ${me.stats.want} • Read: ${me.stats.read}`;
 
-        const badges = await authGet('/me/badges');
-        document.getElementById('meBadges').innerHTML = badges.length ? badges.map(badgePill).join(' ') : '<span class="opacity-60">No badges yet</span>';
+      const badges = await authGet('/me/badges');
+      document.getElementById('meBadges').innerHTML = badges.length ? badges.map(badgePill).join(' ') : '<span class="opacity-60">No badges yet</span>';
 
-        const want = await authGet('/me/shelf?status=WANT');
-        document.getElementById('meWant').innerHTML = want.length ? want.map(x => li(`${x.title}${x.author ? ` — ${x.author}` : ''}`)).join('') : '<li class="opacity-60">Empty</li>';
+      const want = await authGet('/me/shelf?status=WANT');
+      document.getElementById('meWant').innerHTML = want.length ? want.map(x => li(`${x.title}${x.author?` — ${x.author}`:''}`)).join('') : '<li class="opacity-60">Empty</li>';
 
-        const read = await authGet('/me/shelf?status=READ');
-        document.getElementById('meRead').innerHTML = read.length ? read.map(x => li(`${x.title}${x.author ? ` — ${x.author}` : ''}`)).join('') : '<li class="opacity-60">Empty</li>';
-      } catch (e) {
-        console.warn('profile load failed', e);
-      }
+      const read = await authGet('/me/shelf?status=READ');
+      document.getElementById('meRead').innerHTML = read.length ? read.map(x => li(`${x.title}${x.author?` — ${x.author}`:''}`)).join('') : '<li class="opacity-60">Empty</li>';
     }
 
     // --- logout ---
     document.getElementById('logoutBtn').onclick = () => {
       localStorage.removeItem('access');
-      window.location.href = '/ui/login.html';
+      window.location.href = 'login.html';
     };
   </script>
 </body>
-
 </html>

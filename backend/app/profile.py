@@ -5,10 +5,10 @@ from typing import Optional, List
 from datetime import datetime
 from sqlalchemy import func
 
-from models import (
+from .models import (
     get_session, User, BookShelf, SearchEvent, UserBadge, ShelfStatus
 )
-from auth import get_current_user  # reuse your bearer/cookie auth
+from .auth import get_current_user  # reuse your bearer/cookie auth
 
 
 router = APIRouter(prefix="/me", tags=["me"])
